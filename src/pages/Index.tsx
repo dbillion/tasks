@@ -51,8 +51,21 @@ const Index = () => {
         setUserLongitude(position.coords.longitude);
         toast.success("Location successfully retrieved");
       },
-      () => {
-        toast.error("Unable to retrieve your location");
+      (error) => {
+        console.error("Error retrieving location:", error);
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            toast.error("User denied the request for Geolocation.");
+            break;
+          case error.POSITION_UNAVAILABLE:
+            toast.error("Location information is unavailable.");
+            break;
+          case error.TIMEOUT:
+            toast.error("The request to get user location timed out.");
+            break;
+          default:
+            toast.error("An unknown error occurred.");
+        }
       }
     );
   };

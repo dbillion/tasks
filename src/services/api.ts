@@ -46,6 +46,6 @@ export const fetchVenueDynamicData = async (venueSlug: string) => {
   }
 
 
-  console.log("Fetched Static Data:", JSON.stringify(data, null, 2)); // Log the static data
+  // console.log("Fetched Static Data:", JSON.stringify(data, null, 2)); // Log the static data
   return data;
 };
