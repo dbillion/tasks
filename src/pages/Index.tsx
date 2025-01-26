@@ -45,28 +45,43 @@ const Index = () => {
       return;
     }
 
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    };
+
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        console.log("Position received:", position);
         setUserLatitude(position.coords.latitude);
         setUserLongitude(position.coords.longitude);
         toast.success("Location successfully retrieved");
       },
       (error) => {
-        console.error("Error retrieving location:", error);
+        console.error("Detailed error:", {
+          code: error.code,
+          message: error.message,
+          PERMISSION_DENIED: error.PERMISSION_DENIED,
+          POSITION_UNAVAILABLE: error.POSITION_UNAVAILABLE,
+          TIMEOUT: error.TIMEOUT
+        });
+        
         switch (error.code) {
           case error.PERMISSION_DENIED:
-            toast.error("User denied the request for Geolocation.");
+            toast.error("User denied the request for Geolocation. Please check your browser settings.");
             break;
           case error.POSITION_UNAVAILABLE:
-            toast.error("Location information is unavailable.");
+            toast.error("Location information is unavailable. Please try again.");
             break;
           case error.TIMEOUT:
-            toast.error("The request to get user location timed out.");
+            toast.error("The request to get user location timed out. Please try again.");
             break;
           default:
-            toast.error("An unknown error occurred.");
+            toast.error(`An unknown error occurred: ${error.message}`);
         }
-      }
+      },
+      options
     );
   };
 
